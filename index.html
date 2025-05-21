@@ -1,193 +1,121 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>LUMINARY LOGISTICS</title>
-  <link rel="stylesheet" href="style.css">
-<link rel="icon" type="image/x-icon" href="img.jpg">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>3D Animated Portfolio</title>
+  <style>
+    /* Reset & Base */
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #0d0f21; color: #e0e6f8; overflow-x: hidden; }
 
+    /* Header/Nav */
+    header { position: fixed; width: 100%; top: 0; left: 0; background: rgba(13,15,33,0.95); z-index:1000; box-shadow: 0 2px 10px rgba(0,0,0,0.7); }
+    .navbar { display:flex; justify-content:space-between; align-items:center; padding:12px 24px; }
+    .navbar .logo { font-size:1.6rem; font-weight:bold; color:#00d1ff; }
+    .navbar ul { display:flex; gap:20px; }
+    .navbar a { padding:8px 14px; border:2px solid #00d1ff; border-radius:6px; transition:background .3s,transform .2s; color:#e0e6f8; }
+    .navbar a:hover { background:#00d1ff; color:#0d0f21; transform:scale(1.05); }
+    .menu-toggle { display:none; flex-direction:column; cursor:pointer; }
+    .menu-toggle span { height:3px; width:28px; background:#e0e6f8; margin:4px 0; transition:all .3s ease; }
+    @media(max-width:768px) { .navbar ul{ display:none; flex-direction:column; background:#13152d; position:absolute; top:60px; left:0; width:100%; padding:10px 0;} .navbar ul.active{display:flex;} .navbar ul li{margin:10px 0;text-align:center;} .menu-toggle{display:flex;} }
+
+    /* 3D Scene */
+    .scene { perspective:1000px; position:relative; }
+
+    /* Card Flip with Text Overlay */
+    .card-container { position:relative; width:320px; height:420px; margin:100px auto; transform-style:preserve-3d; transition:transform .8s ease; }
+    .card-container:hover { transform:rotateY(180deg); }
+    /* Intro text at bottom of card */
+    .intro-text { position:absolute; bottom:20px; left:20px; font-size:1.4rem; z-index:10; overflow:hidden; max-width:280px; }
+    .intro-text span { display:inline-block; clip-path: inset(0 100% 0 0); animation: textMask 2s forwards, gradientShift 4s ease infinite; background: linear-gradient(90deg, #00d1ff, #ff4d4d, #f72585); background-size:200% 200%; -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
+    @keyframes textMask { to { clip-path: inset(0 0 0 0); } }
+    @keyframes gradientShift { 0% { background-position:0% 50%; } 50% { background-position:100% 50%; } 100% { background-position:0% 50%; } }
+
+    /* Card Faces */
+    .card { position:absolute; width:100%; height:100%; backface-visibility:hidden; border-radius:16px; overflow:hidden; box-shadow:0 25px 50px rgba(0,0,0,0.6); }
+    .card.front { background:#1b1d3a; display:flex; align-items:center; justify-content:center; }
+    .card.front img { width:100%; height:100%; object-fit:cover; }
+    .card.back { background:#1b1d3a; transform:rotateY(180deg); padding:24px; display:flex; flex-direction:column; justify-content:center; align-items:center; }
+    .card.back h2 { margin-bottom:12px; color:#00d1ff; }
+    .card.back p { font-size:.95rem; line-height:1.5; color:#c0c6e0; }
+
+    /* Sections */
+    section { min-height:100vh; display:flex; justify-content:center; align-items:center; padding:120px 20px 60px; }
+    h1.section-title { font-size:2.8rem; margin-bottom:24px; color:#00d1ff; }
+
+    /* Gallery */
+    .gallery { display:flex; justify-content:center; gap:24px; flex-wrap:wrap; }
+    .gallery-item { width:220px; height:220px; background:#24275b; transition:transform .4s; border-radius:12px; overflow:hidden; }
+    .gallery-item:hover { transform:rotateX(15deg) rotateY(15deg); }
+    .gallery-item img { width:100%; height:100%; object-fit:cover; }
+
+    /* Contact Form */
+    .contact-form-wrapper { perspective:1200px; }
+    .contact-form { width:340px; padding:36px; background:#1b1d3a; border-radius:16px; box-shadow:0 30px 60px rgba(0,0,0,0.7); transition:transform .6s ease; }
+    .contact-form:hover { transform:rotateX(10deg) rotateY(15deg); }
+    .contact-form input, .contact-form textarea { width:100%; padding:12px; margin-bottom:16px; border:none; border-radius:6px; background:#2a2c4a; color:#e0e6f8; }
+    .contact-form button { padding:14px; border:none; border-radius:6px; background:#00d1ff; color:#0d0f21; font-weight:bold; transition:background .3s; }
+    .contact-form button:hover { background:#7ef9ff; }
+  </style>
 </head>
 <body>
-  <!-- Header Section -->
+  <!-- Navigation -->
+  <header>
+    <div class="navbar">
+      <div class="logo">MyPortfolio</div>
+      <div class="menu-toggle" id="menu-toggle"><span></span><span></span><span></span></div>
+      <ul id="nav-links"><li><a href="#about">About</a></li><li><a href="#projects">Projects</a></li><li><a href="#contact">Contact</a></li></ul>
+    </div>
+  </header>
 
-
-  <link rel="stylesheet" href="bootstrap.min.css">
-
-  <nav class="navbar navbar-expand-md navbar-dark bg-dark" aria-label="Fourth navbar example">
-    <div class="container-fluid">
-      <a class="navbar-brand" href="./index.html">LUMINARY</a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarsExample04" aria-controls="navbarsExample04" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-
-      <div class="collapse navbar-collapse" id="navbarsExample04">
-        <ul class="navbar-nav me-auto mb-2 mb-md-0">
-          <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="./login.html">Login</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">Link</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link disabled">Disabled</a>
-          </li>
-          <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown" aria-expanded="false">Dropdown</a>
-            <ul class="dropdown-menu">
-              <li><a class="dropdown-item" href="#">Action</a></li>
-              <li><a class="dropdown-item" href="#">Another action</a></li>
-              <li><a class="dropdown-item" href="#">Something else here</a></li>
-            </ul>
-          </li>
-        </ul>
-        <form role="search">
-          <input class="form-control" type="search" placeholder="Search" aria-label="Search">
-        </form>
+  <!-- About Section -->
+  <section id="about">
+    <div class="scene">
+      <!-- Flip Card with Intro at Bottom -->
+      <div class="card-container">
+        <div class="intro-text"><span id="live-intro">Hi, I am a programmer, designer, front-end developer.</span></div>
+        <div class="card front" style="background-color: #1b1d3a;">
+            <!-- <img src="IMG/pic-edit-removebg-preview (1).png" alt="Your Picture"/> -->
+        </div>
+        <div class="card back"><h2>ANGELO</h2><p>Full‑Stack Developer passionate about creating immersive web experiences using modern technologies.</p></div>
       </div>
     </div>
-  </nav>
-
-  <!-- Hero Section -->
-  <section id="hero">
-    <h1>Welcome to Luminary logistics Shipping Website</h1>
-    <p>We provide fast and reliable shipping services to various countries around the world.</p>
-    <button>Get Started</button>
   </section>
 
-  <!-- Shipping Section -->
-  <section id="shipping">
-    <h2>Shipping Services</h2>
-    <p>We ship to the following countries:</p>
-    <ul>
-      <li>USA</li>
-      <li>Canada</li>
-      <li>UK</li>
-      <li>Australia</li>
-      <li>Germany</li>
-      <li>France</li>
-      <li>Japan</li>
-      <li>China</li>
-    </ul>
-    <h3>Shipping Rates</h3>
-    <table>
-      <thead>
-        <tr>
-          <th>Country</th>
-          <th>Rate</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>USA</td>
-          <td>$</td>
-        </tr>
-        <tr>
-          <td>Canada</td>
-          <td>$</td>
-        </tr>
-        <tr>
-          <td>UK</td>
-          <td>$</td>
-        </tr>
-        <tr>
-          <td>Australia</td>
-          <td>$</td>
-        </tr>
-      </tbody>
-    </table>
-  </section>
+  <!-- Projects Section -->
+  <section id="projects"><div><h1 class="section-title">Projects</h1><div class="gallery"><div class="gallery-item"><img src="https://source.unsplash.com/200x200/?code" alt="Project 1"/></div><div class="gallery-item"><img src="https://source.unsplash.com/200x200/?app" alt="Project 2"/></div><div class="gallery-item"><img src="https://source.unsplash.com/200x200/?design" alt="Project 3"/></div></div></div></section>
 
-  <!-- Tracking Section -->
-  <section id="tracking">
-    <h2>Track Your Package</h2>
-    <form>
-      <input type="text" placeholder="Tracking Number">
-      <button>Track</button>
-    </form>
-  </section>
+  <!-- Contact Section -->
+  <section id="contact"><div><h1 class="section-title">Contact Me</h1><div class="contact-form-wrapper"><form class="contact-form"><input type="text" placeholder="Your Name" required><input type="email" placeholder="Your Email" required><textarea rows="4" placeholder="Message..." required></textarea><button type="submit">Send</button></form></div></div></section>
 
-  <!-- Login Section -->
-  <section id="login">
-    <h2>Login</h2>
-    <form>
-      <input type="text" placeholder="Username">
-      <input type="password" placeholder="Password">
-      <button>Login</button>
-    </form>
-  </section>
+  <script>
+    // Toggle nav on mobile
+    const menuToggle = document.getElementById('menu-toggle');
+    const navLinks = document.getElementById('nav-links');
+    menuToggle.addEventListener('click', () => navLinks.classList.toggle('active'));
 
-  <!-- About Us Section -->
-  <section id="about">
-    <h2>About Us</h2>
-    <p>We are a team of experienced shipping professionals dedicated to providing fast and reliable shipping services to our customers.</p>
-    <p>Our mission is to provide excellent customer service and ensure that our customers' packages are delivered safely and on time.</p>
-  </section>
+    // Pause and hide mask on card flip
+    const introSpan = document.getElementById('live-intro');
+    const introContainer = document.querySelector('.intro-text');
+    const cardContainer = document.querySelector('.card-container');
+    cardContainer.addEventListener('mouseenter', () => {
+      introSpan.style.animation = 'none';
+      introContainer.style.opacity = '0';
+    });
+    cardContainer.addEventListener('mouseleave', () => {
+      introContainer.style.opacity = '1';
+      introSpan.style.animation = 'textMask 2s forwards';
+    });
 
-  <!-- Contact Us Section -->
-  <section id="contact">
-    <h2>Contact Us</h2>
-    <p>If you have any questions or concerns, please don't hesitate to contact us.</p>
-    <form>
-      <input type="text" placeholder="Name">
-      <input type="email" placeholder="Email">
-      <textarea placeholder="Message"></textarea>
-      <button>Send</button>
-    </form>
-  </section>
-
-  <!-- FAQ Section -->
-  <section id="faq">
-    <h2>Frequently Asked Questions</h2>
-    <ul>
-      <li>
-        <h3>Q: How long does shipping take?</h3>
-        <p>A: Shipping times vary depending on the destination and shipping method.</p>
-      </li>
-      <li>
-        <h3>Q: Can I track my package?</h3>
-        <p>A: Yes, you can track your package using the tracking number provided.</p>
-      </li>
-      <li>
-        <h3>Q: What happens if my package is lost or damaged?</h3>
-        <p>A: We take great care in handling packages, but if your package is lost or damaged, please contact us and we will assist you in resolving the issue.</p>
-      </li>
-    </ul>
-  </section>
-
-<!-- Testimonials Section -->
-<section id="testimonials">
-    <h2>What Our Customers Say</h2>
-    <ul>
-      <li>
-        <p>"I was impressed with the speed and reliability of the shipping service. My package arrived on time and in perfect condition."</p>
-        <p>— John D.</p>
-      </li>
-      <li>
-        <p>"The customer service team was very helpful and responsive to my questions. I would definitely recommend this shipping company."</p>
-        <p>— Emily K.</p>
-      </li>
-      <li>
-        <p>"I've used several shipping companies in the past, but this one stands out for its excellent service and competitive prices."</p>
-        <p>— David L.</p>
-      </li>
-    </ul>
-  </section>
-  
-  <!-- Footer Section -->
-  <footer>
-    <p>&copy; 2024 Shipping Website</p>
-    <ul>
-      <li><a href="#">Terms and Conditions</a></li>
-      <li><a href="#">Privacy Policy</a></li>
-    </ul>
-    <ul>
-      <li><a href="#" class="social-icon facebook">facebook</a></li>
-      <li><a href="#" class="social-icon twitter">twitter</a></li>
-      <li><a href="#" class="social-icon instagram">instagram</a></li>
-    </ul>
-  </footer>
-  
-  <script src="bootstrap.bundle.min.js"></script>
-  </body>
-  </html>
+    // Smooth scroll for nav links
+    document.querySelectorAll('.navbar a').forEach(link => {
+      link.addEventListener('click', e => {
+        e.preventDefault();
+        document.querySelector(link.getAttribute('href')).scrollIntoView({ behavior: 'smooth' });
+        navLinks.classList.remove('active');
+      });
+    });
+  </script>
+</body>
+</html>
